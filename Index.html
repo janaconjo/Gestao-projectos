@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Projectos </title>
+    <link rel="stylesheet" href="Index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Gestão de Projectos</h2>
+
+            <div style="padding: 20px 35px 5px 35px; background-color: #fff;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 15px;">
+                    <input type="text" id="barraPesquisa" placeholder="Buscar por Nome ou Tema..." style="flex-grow: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem;">
+                    <button id="btnBaixarRelatorio" class="action-button edit-button" style="background-color:#5f73ba; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-weight: 600; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                        Baixar Relatório
+                    </button>
+                </div>
+            </div>
+
+            <table class="data-table tabela-projetos-ajustada" id="tabelaProjetos">
+                <thead>
+                    <tr>
+                        <th>Nome do Estudante</th>
+                        <th>Tema</th>
+                        <th>Última Atualização</th>
+                        <th>Nota</th> <th>Estado</th> </tr>
+                </thead>
+                <tbody id="corpoTabela"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <button id="addEstudanteBtn" class="add-button">+</button>
+
+    <div id="modalAddEstudante" class="modal">
+        <div class="modal-content">
+            <span class="fechar-btn-add">&times;</span>
+            <h2>Adicionar Novo Estudante</h2>
+            <form id="formNovoEstudante">
+                <label for="novoNome">Nome do Estudante:</label>
+                <input type="text" id="novoNome" required><br>
+
+                <label for="novoTema">Tema do Projeto:</label>
+                <input type="text" id="novoTema" required><br>
+
+                <button type="submit" class="submit-button">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalDetalhes" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Detalhes do Projecto</h2>
+
+            <div class="modal-info">
+                <p><strong>Nome do Estudante:</strong> <span id="nomeProjeto"></span></p>
+                <p><strong>Tema:</strong> <span id="temaProjeto"></span></p>
+
+                <label for="estadoProjetoSelect"><strong>Estado:</strong></label>
+                <select id="estadoProjetoSelect">
+                    <option value="Pendente">Pendente</option>
+                    <option value="Em Andamento">Em Andamento</option>
+                    <option value="Concluído">Concluído</option>
+                </select>
+
+                <label for="ultimaAtualizacaoInput"><strong>Última Atualização:</strong></label>
+                <input type="date" id="ultimaAtualizacaoInput">
+                
+                <label for="notaProjetoInput"><strong>Nota:</strong></label>
+                <input type="number" id="notaProjetoInput" min="0" max="20" step="0.1" > 
+
+                <label for="comentariosDocente"><strong>Observações:</strong></label>
+                <textarea id="comentariosDocente" rows="4" placeholder="Escreva aqui as observações sobre o projeto."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button id="btnEditarProjeto" class="action-button edit-button">Editar</button>
+                <button id="btnExcluirProjeto" class="action-button delete-button">Excluir </button>
+            </div>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="Index.js"></script>
+</body>
+</html>

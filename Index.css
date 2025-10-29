@@ -1,0 +1,363 @@
+@import url('https://fonts.fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; 
+    min-height: 100vh;
+}
+/*Tabela*/
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0;
+    table-layout: fixed;
+}
+
+.data-table thead {
+    background-color: #eef2f7;
+    border-bottom: 2px solid #ddd;
+}
+
+.data-table th {
+    color: #777;
+    padding: 15px 35px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.data-table tbody tr {
+    transition: background-color 0.3s, box-shadow 0.3s;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table tbody tr:hover {
+    background-color: #fcfcfc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.data-table td {
+    padding: 15px 35px;
+    color: #333;
+    font-weight: 400;
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+.tabela-projetos-ajustada th:nth-child(1), 
+.tabela-projetos-ajustada td:nth-child(1) {
+    width: 25%;
+}
+.tabela-projetos-ajustada th:nth-child(2), 
+.tabela-projetos-ajustada td:nth-child(2) {
+    width: 25%;
+}
+.tabela-projetos-ajustada th:nth-child(3), 
+.tabela-projetos-ajustada td:nth-child(3) {
+    width: 20%; 
+}
+.tabela-projetos-ajustada th:nth-child(4), 
+.tabela-projetos-ajustada td:nth-child(4) {
+    width: 15%;
+    text-align: center; 
+}
+.tabela-projetos-ajustada th:nth-child(5), 
+.tabela-projetos-ajustada td:nth-child(5) {
+    width: 15%;
+    text-align: center; 
+}
+/*Container card  */
+.container {
+    width: 95%;
+    max-width: 1100px; 
+    margin-top: 30px;
+    padding: 0;
+    margin-bottom: 50px;
+}
+.card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding-bottom: 30px; 
+}
+.card h2 {
+    background-color: #3b4e76;
+    color: #fff;
+    padding: 25px 35px;
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+/*Estados*/
+.data-table .status-badge {
+    display: inline-flex; 
+    align-items: center; 
+    gap: 8px; 
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    min-width: 110px; 
+    color: white; 
+    justify-content: center; 
+}
+
+.status-concluido {
+    background-color: #4CAF50; 
+}
+
+.status-andamento {
+    background-color: #FF9800; 
+}
+
+.status-pendente {
+    background-color:  #d11d1d; 
+    animation: pulse-danger 1.5s infinite alternate; 
+}
+.tabela-projetos-ajustada td:nth-child(5) { 
+    display: table-cell; 
+    text-align: center; 
+    padding: 15px 10px; 
+}
+/*Animacao do estado pendente */
+@keyframes pulse-danger {
+    0% {
+        box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.7); 
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.03); 
+    }
+    100% {
+        box-shadow: 0 0 0 8px rgba(233, 30, 99, 0); 
+        transform: scale(1);
+    }
+}
+
+/*barra de pesquisa*/
+.search-container {
+    padding: 20px 35px 5px 35px;
+    background-color: #fff;
+}
+
+#barraPesquisa {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#barraPesquisa:focus {
+    border-color: #3949ab;
+    outline: none;
+    box-shadow: 0 0 5px rgba(57, 73, 171, 0.2);
+}
+/*Botao para adicionar estudante*/
+.add-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px; 
+    height: 60px;
+    border-radius: 50%;
+    background-color: #3949ab;
+    color: #fff;
+    font-size: 35px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 5;
+}
+
+.add-button:hover {
+    transform: scale(1.05);
+    background-color: #1a237e;
+}
+/*Modal de detalhes de estudantes*/
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; 
+    background-color: rgba(0,0,0,0.6); 
+    padding-top: 10px; 
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 2% auto; 
+    margin-top: 10px; 
+    padding: 35px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 750px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.modal-content h2 {
+    color: #3949ab;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.close, .fechar-btn-add {
+    color: #999;
+    float: right;
+    font-size: 35px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.close:hover, .close:focus,
+.fechar-btn-add:hover, .fechar-btn-add:focus {
+    color: #e91e63;
+}
+.modal-info label {
+    display: block;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.modal-info p strong {
+    color: #1a237e;
+}
+.modal-info span {
+    font-weight: 400;
+    color: #555;
+}
+.modal-info input[type="text"], 
+.modal-info input[type="date"], 
+.modal-info select, 
+.modal-info input[type="number"],
+.modal-info textarea,
+
+#formNovoEstudante input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px; 
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+.modal-info input:focus, 
+.modal-info select:focus, 
+.modal-info textarea:focus,
+#formNovoEstudante input:focus {
+    border-color: #3949ab;
+    outline: none;
+    box-shadow: 0 0 5px rgba(57, 73, 171, 0.3); 
+}
+
+.modal-info input:disabled, 
+.modal-info select:disabled {
+    background-color: #f8f8f8;
+    color: #777;
+    cursor: not-allowed;
+    border: 1px solid #eee;
+}
+
+/* Botões de Ação do Modal */
+.modal-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.action-button, .submit-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button {
+    background-color: #03a9f4; 
+    color: white;
+}
+
+.delete-button {
+    background-color: #d11d1d; 
+    color: white;
+}
+
+.submit-button {
+    background-color:  #3b4e76; 
+    color: white;
+    margin-top: 20px;
+    width: 100%; 
+    font-size: 1rem;
+}
+.submit-button:hover {
+    background-color: #1a237e;
+    transform: translateY(-1px);
+}
+
+/*Parte das observacoes*/
+.tooltip-container {
+    position: relative;
+    display: block; 
+}
+.tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    width: 280px; 
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 100%; 
+    left: 50%;
+    margin-left: -140px;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none; 
+    white-space: pre-wrap; 
+    font-size: 0.9em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.tooltip-container:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
+.data-table td:nth-child(1) {
+    cursor: pointer; 
+}

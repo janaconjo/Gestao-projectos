@@ -25,7 +25,11 @@ const nomeProjetoEl = document.getElementById('nomeProjeto');
 const temaProjetoEl = document.getElementById('temaProjeto');
 const estadoProjetoSelect = document.getElementById('estadoProjetoSelect');
 const ultimaAtualizacaoInput = document.getElementById('ultimaAtualizacaoInput');
+
+// Selectores de Progresso e Nota
+const progressoProjetoInput = document.getElementById('progressoProjetoInput'); 
 const notaProjetoInput = document.getElementById('notaProjetoInput'); 
+
 const comentariosDocente = document.getElementById('comentariosDocente'); 
 const btnExcluirProjeto = document.getElementById('btnExcluirProjeto');
 const btnEditarProjeto = document.getElementById('btnEditarProjeto');
@@ -39,20 +43,24 @@ const barraPesquisa = document.getElementById('barraPesquisa');
 function montarBadgeEstado(estado) {
     const span = document.createElement('span');
     span.classList.add('status-badge'); 
+
+ 
+    if (!estado) estado = "Em Andamento";
+
     let iconClass = '';
     let statusText = estado;
 
     if (estado === 'Concluído') { 
         span.classList.add('status-concluido');
         iconClass = 'fas fa-check-circle'; 
-    } else if (estado === 'Em Andamento') { 
+    } else if (estado === 'Pendente') {
+        span.classList.add('status-pendente');
+        iconClass = 'fas fa-exclamation-triangle';
+    } else { 
         span.classList.add('status-andamento');
         iconClass = 'fas fa-spinner fa-pulse'; 
-    } else if (estado === 'Pendente') { 
-        span.classList.add('status-pendente');
-        iconClass = 'fas fa-exclamation-triangle'; 
     }
-    
+
     const icon = document.createElement('i');
     icon.className = iconClass;
     span.appendChild(icon);
@@ -60,19 +68,23 @@ function montarBadgeEstado(estado) {
     return span;
 }
 
-//Tabela 
+
+// Tabela 
 function popularTabela(listaProjetos) {
     corpoTabela.innerHTML = '';
     listaProjetos.forEach(projeto => {
         const linha = corpoTabela.insertRow();
-
+        
+     
+        const progresso = projeto.progresso !== null && projeto.progresso !== undefined ? projeto.progresso : 0;
+        const nota = projeto.nota !== null && projeto.nota !== undefined ? projeto.nota : 'SN';
+        const observacoes = projeto.comentarios ? projeto.comentarios.trim() : 'Nenhuma observação.';
+        
+       
         const celulaNome = linha.insertCell();
         const tooltipContainer = document.createElement('div');
         tooltipContainer.className = 'tooltip-container';
 
-        const nota = projeto.nota !== null && projeto.nota !== undefined ? projeto.nota : 'SN';
-        const observacoes = projeto.comentarios ? projeto.comentarios.trim() : 'Nenhuma observação.';
-        
         let tooltipContentText = `Nota: ${nota}\n\n`;
         const obsPreview = observacoes.substring(0, 150);
         tooltipContentText += `Observações:\n${obsPreview}${observacoes.length > 150 ? '...' : ''}`;
@@ -83,22 +95,47 @@ function popularTabela(listaProjetos) {
         
         tooltipContainer.textContent = projeto.nome;
         tooltipContainer.appendChild(tooltipContent);
-        
         celulaNome.appendChild(tooltipContainer);
         linha.insertCell().textContent = projeto.tema;
         linha.insertCell().textContent = projeto.ultimaAtualizacao;
-        linha.insertCell().textContent = projeto.nota || 'SN';
+        const celulaProgresso = linha.insertCell();
+        const progressBarContainer = document.createElement('div');
+        progressBarContainer.className = 'progress-bar-container';
+        const progressBarFill = document.createElement('div');
+        progressBarFill.className = 'progress-bar-fill';
+        progressBarFill.style.width = `${progresso}%`;
+        if (progresso < 50 && progresso > 0) {
+            progressBarFill.classList.add('fill-low');
+        } else if (progresso >= 50 && progresso < 100) {
+            progressBarFill.classList.add('fill-high');
+        } else if (progresso === 100) {
+             progressBarFill.classList.add('status-concluido');
+        } else {
+             progressBarFill.style.width = '0%';
+        }
+        
+        const progressText = document.createElement('span');
+        progressText.className = 'progress-text';
+        progressText.textContent = `${progresso}%`;
+
+        progressBarContainer.appendChild(progressBarFill);
+        progressBarContainer.appendChild(progressText);
+        celulaProgresso.appendChild(progressBarContainer);
+        linha.insertCell().textContent = nota;
         const celulaEstado = linha.insertCell();
         celulaEstado.appendChild(montarBadgeEstado(projeto.estado));
+        
         linha.onclick = () => abrirModal(projeto.id);
     });
 }
+
 async function carregarProjetos() {
     projetos = [];
     const snapshot = await getDocs(projetosRef);
     snapshot.forEach(docSnap => projetos.push({ id: docSnap.id, ...docSnap.data() }));
     popularTabela(projetos);
 }
+
 function filtrarProjetos() {
     const termo = barraPesquisa.value.toLowerCase().trim();
 
@@ -115,15 +152,15 @@ function filtrarProjetos() {
     popularTabela(projetosFiltrados);
 }
 
-// Adicionar novo estudante
 async function salvarNovoEstudante(nome, tema) {
     await addDoc(projetosRef, {
         nome,
         tema,
-        estado: "Pendente",
+        estado: "Em Andamento", 
         ultimaAtualizacao: obterDataHojeISO(),
         comentarios: "",
         nota: null, 
+        progresso: 0, 
     });
     modalAddEstudante.style.display = 'none';
     formNovoEstudante.reset();
@@ -155,45 +192,49 @@ function abrirModal(projetoId) {
     
     projetoAtualId = projetoId;
 
-    // Mostrar dados
     nomeProjetoEl.textContent = projeto.nome;
     temaProjetoEl.textContent = projeto.tema;
-
     estadoProjetoSelect.value = projeto.estado;
     ultimaAtualizacaoInput.value = projeto.ultimaAtualizacao;
+    
+    progressoProjetoInput.value = projeto.progresso !== null && projeto.progresso !== undefined ? projeto.progresso : '';
+    progressoProjetoInput.disabled = true;
+
     notaProjetoInput.value = projeto.nota !== null && projeto.nota !== undefined ? projeto.nota : '';
     notaProjetoInput.disabled = true;
     comentariosDocente.value = projeto.comentarios || "";
     estadoProjetoSelect.disabled = true;
     ultimaAtualizacaoInput.disabled = true;
     comentariosDocente.disabled = true;
-
-    // Botão Editar
     btnEditarProjeto.textContent = "Editar";
     btnEditarProjeto.onclick = () => habilitarEdicao();
 
     modalDetalhes.style.display = 'block';
 }
-//funcao para edicao
 function habilitarEdicao() {
     estadoProjetoSelect.disabled = false;
     ultimaAtualizacaoInput.disabled = false;
     comentariosDocente.disabled = false;
+    progressoProjetoInput.disabled = false; 
     notaProjetoInput.disabled = false; 
 
     btnEditarProjeto.textContent = "Guardar Alterações";
     btnEditarProjeto.onclick = guardarAlteracoes;
 }
 
-// Guardar alterações 
 async function guardarAlteracoes() {
     const projetoDocRef = doc(db, 'projetosEstudantes', projetoAtualId);
+    
     let novaNota = notaProjetoInput.value === "" ? null : parseFloat(notaProjetoInput.value);
+    let novoProgresso = progressoProjetoInput.value === "" ? 0 : parseInt(progressoProjetoInput.value, 10);
+    novoProgresso = Math.max(0, Math.min(100, novoProgresso)); 
+
     let updatePayload = {
         estado: estadoProjetoSelect.value,
         ultimaAtualizacao: ultimaAtualizacaoInput.value,
         comentarios: comentariosDocente.value,
         nota: novaNota, 
+        progresso: novoProgresso, 
     };
     await updateDoc(projetoDocRef, updatePayload);
     modalDetalhes.style.display = 'none';
@@ -202,7 +243,7 @@ async function guardarAlteracoes() {
 
     Swal.fire({
         title: 'Salvo!',
-        text: 'As alterações do projeto foram guardadas com sucesso.',
+        text: 'As alterações do projecto foram guardadas com sucesso.',
         icon: 'success',
         confirmButtonText: 'Ok'
     });
@@ -219,7 +260,7 @@ async function excluirProjeto() {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sim, excluir!',
+        confirmButtonText: 'Sim',
         cancelButtonText: 'Cancelar'
     });
 
@@ -234,7 +275,7 @@ async function excluirProjeto() {
 
     Swal.fire(
         'Excluído!',
-        'O projeto foi excluído com sucesso.',
+        'O projecto foi excluído com sucesso.',
         'success'
     );
 }
@@ -252,17 +293,24 @@ function baixarRelatorio() {
         return;
     }
     
-    const headers = ["Nome do Estudante", "Tema", "Última Atualização", "Nota", "Estado", "Observações"];
+  
+    const headers = ["Nome do Estudante", "Tema", "Última Atualização", "% Progresso", "Nota", "Estado", "Observações"]; 
+
     const csvData = projetos.map(p => ({
         "Nome do Estudante": p.nome,
         "Tema": p.tema,
         "Última Atualização": p.ultimaAtualizacao,
         "Nota": p.nota !== null && p.nota !== undefined ? String(p.nota).replace('.', ',') : '', 
         "Estado": p.estado,
+        
+      
+        "% Progresso": p.progresso !== null && p.progresso !== undefined ? p.progresso : '0', 
+
         "Observações": p.comentarios 
             ? p.comentarios.replace(/\n/g, ' ').replace(/"/g, '""') 
             : '', 
     }));
+    
     let csv = headers.join(";") + "\n"; 
     
     csvData.forEach(row => {
@@ -277,6 +325,7 @@ function baixarRelatorio() {
         });
         csv += values.join(";") + "\n";
     });
+    
     const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -320,5 +369,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     barraPesquisa.addEventListener('input', filtrarProjetos);
     btnBaixarRelatorio.onclick = baixarRelatorio;
 });
-
-

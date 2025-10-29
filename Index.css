@@ -1,4 +1,4 @@
-@import url('https://fonts.fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 body {
@@ -25,7 +25,7 @@ body {
 
 .data-table th {
     color: #777;
-    padding: 15px 35px;
+    padding: 15px 15px; 
     text-align: left;
     font-weight: 600;
     text-transform: uppercase;
@@ -45,7 +45,7 @@ body {
 }
 
 .data-table td {
-    padding: 15px 35px;
+    padding: 15px 15px; 
     color: #333;
     font-weight: 400;
     font-size: 0.95rem;
@@ -57,11 +57,12 @@ body {
 }
 .tabela-projetos-ajustada th:nth-child(2), 
 .tabela-projetos-ajustada td:nth-child(2) {
-    width: 25%;
+    width: 22%; 
 }
 .tabela-projetos-ajustada th:nth-child(3), 
 .tabela-projetos-ajustada td:nth-child(3) {
-    width: 20%; 
+    width: 15%; 
+    text-align: center; 
 }
 .tabela-projetos-ajustada th:nth-child(4), 
 .tabela-projetos-ajustada td:nth-child(4) {
@@ -70,10 +71,51 @@ body {
 }
 .tabela-projetos-ajustada th:nth-child(5), 
 .tabela-projetos-ajustada td:nth-child(5) {
-    width: 15%;
+    width: 10%;
     text-align: center; 
 }
-/*Container card  */
+.tabela-projetos-ajustada th:nth-child(6), 
+.tabela-projetos-ajustada td:nth-child(6) {
+    width: 13%;
+    text-align: center; 
+    padding-left: 5px; 
+    padding-right: 5px;
+}
+
+
+
+/*Estados*/
+.data-table .status-badge {
+    display: inline-flex; 
+    align-items: center; 
+    gap: 3px;
+    padding: 5px 6px; 
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    min-width: 100px; 
+    color: white; 
+    justify-content: center; 
+    white-space: nowrap; 
+}
+
+.status-concluido {
+    background-color: #4CAF50; 
+}
+
+.status-andamento {
+    background-color: #FF9800; 
+}
+
+.status-pendente {
+    background-color: #d11d1d; 
+    animation: pulse-danger 1.5s infinite alternate; 
+}
+
+
+/*Container card  */
 .container {
     width: 95%;
     max-width: 1100px; 
@@ -96,39 +138,7 @@ body {
     font-size: 1.6rem;
     font-weight: 600;
 }
-/*Estados*/
-.data-table .status-badge {
-    display: inline-flex; 
-    align-items: center; 
-    gap: 8px; 
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-    min-width: 110px; 
-    color: white; 
-    justify-content: center; 
-}
 
-.status-concluido {
-    background-color: #4CAF50; 
-}
-
-.status-andamento {
-    background-color: #FF9800; 
-}
-
-.status-pendente {
-    background-color:  #d11d1d; 
-    animation: pulse-danger 1.5s infinite alternate; 
-}
-.tabela-projetos-ajustada td:nth-child(5) { 
-    display: table-cell; 
-    text-align: center; 
-    padding: 15px 10px; 
-}
 /*Animacao do estado pendente */
 @keyframes pulse-danger {
     0% {
@@ -318,7 +328,7 @@ body {
 }
 
 .submit-button {
-    background-color:  #3b4e76; 
+    background-color:  #3b4e76; 
     color: white;
     margin-top: 20px;
     width: 100%; 
@@ -360,4 +370,78 @@ body {
 }
 .data-table td:nth-child(1) {
     cursor: pointer; 
+}
+
+/* barra de progresso */
+.progress-bar-container {
+    width: 100%;
+    height: 14px; 
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden; 
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+.progress-bar-fill {
+    height: 100%;
+    background-color: #4CAF50; 
+    transition: width 0.4s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5px;
+    box-sizing: border-box;
+    background-image: linear-gradient(
+        45deg, 
+        rgba(255, 255, 255, 0.15) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.15) 50%, 
+        rgba(255, 255, 255, 0.15) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 20px 20px;
+}
+
+/*animação */
+.progress-striped {
+    animation: progress-stripes 1s linear infinite;
+}
+
+.progress-text {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #ffffff; 
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); 
+    z-index: 1; 
+}
+
+
+.fill-low {
+    background-color: #ff9800 !important; 
+}
+.fill-high {
+    background-color: #77cd28 !important; 
+}
+
+@keyframes progress-stripes {
+    from {
+        background-position: 20px 0;
+    }
+    to {
+        background-position: 0 0;
+    }
+}
+.tabela-projetos-ajustada td:nth-child(4) { 
+    text-align: center; 
+    padding: 10px 15px; 
 }
